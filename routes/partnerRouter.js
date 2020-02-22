@@ -12,7 +12,9 @@ partnerRouter.route('/')
     .then(partners => {
         res.statusCode = 200;
         res.setHeader('Content-Type', 'application/json');
-        res.json(partners);
+        res.json(partners); // both parses into JSON and tells that response is ready
+        //res.end not needed
+        //res.render(error) response .end is implied into this and res.json() 
     })
     .catch(err => next(err));
 })
@@ -31,7 +33,8 @@ partnerRouter.route('/')
     res.end('PUT operation not supported on /partners');
 })
 .delete((req, res, next) => {
-    Partner.deleteMany()
+    Partner.deleteMany() // this automatically deletes everying in partners collection
+    //if no partnerID is passed in 
     .then(response => {
         res.statusCode = 200;
         res.setHeader('Content-Type', 'application/json');
@@ -57,8 +60,9 @@ partnerRouter.route('/:partnerId')
 })
 .put((req, res, next) => {
     Partner.findByIdAndUpdate(req.params.partnerId, {
-        $set: req.body
-    }, { new: true })
+        $set: req.body //$set is mongodB update operator that will update whole object
+        //with request body
+    }, { new: true }) // new true will only update fields that haven't changed 
     .then(partner => {
         res.statusCode = 200;
         res.setHeader('Content-Type', 'application/json');
