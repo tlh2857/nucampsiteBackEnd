@@ -3,14 +3,15 @@ var express = require('express'); // routing
 var path = require('path'); // built in node modules, has mehtods to allow us to 
 // construct  path to folder see line 33 - ex path.join
 // all express apps use path methods 
-var cookieParser = require('cookie-parser'); //parses cookies into json data
-//cookies are stored in browser
+// var cookieParser = require('cookie-parser'); //parses cookies into json data
+// //cookies are stored in browser
 var logger = require('morgan');  // logs api requests to console as middleware
-const session = require('express-session');
-const FileStore = require('session-file-store')(session);
+// const session = require('express-session');
+// const FileStore = require('session-file-store')(session);
 // require function is retunring another function and then immediately calling this function with session
 const passport = require('passport')
-const authenticate =  require('./authenticate');
+// const authenticate =  require('./authenticate');
+const config = require('./config');
 
 
 var indexRouter = require('./routes/index');
@@ -20,7 +21,7 @@ const promotionRouter = require('./routes/promotionRouter');
 const partnerRouter = require('./routes/partnerRouter');
 
 const mongoose = require('mongoose') //provides structure for mongoDB
-const url = 'mongodb://localhost:27017/nucampsite'; // standard format mongo db, with 
+const url = config.mongoUrl; // standard format mongo db, with 
 //host local host, and with port that MongoDB uses. /nucampsite is the name of the database
 //if hosted from cloud, will need authentication key in url
 const connect = mongoose.connect(url, {
@@ -49,36 +50,14 @@ app.use(express.urlencoded({ extended: false })); // have to decoded from non-UR
 
 
 
-app.use(session({
-  name:'session-id',
-  secret:'12345-67890-09876-54321',
-  saveUninitialized: false, 
-  resave: false, 
-  store: new FileStore()
-}));
-
 
 app.use(passport.initialize());
-app.use(passport.session());
 
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 
-function auth(req, res, next) {
-    console.log(req.user);
 
-    if (!req.user) {
-        const err = new Error('You are not authenticated!');
-        err.status = 401;
-        return next(err);
-    } else {
-       return next();
-        }
-    
-}
-
-app.use(auth);
 
 app.use(express.static(path.join(__dirname, 'public'))); //Express.static - for images 
 // this tells express to bypass the parser and bypass the middleware - dont need to process it
