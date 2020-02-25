@@ -39,7 +39,7 @@ exports.jwtPassport = passport.use(
 
 
 function verifyAdmin(req, res, next){
-    console.log(Object.keys(req.user._doc));
+    // console.log(Object.keys(req.user._doc));
     if(req.user.admin){
         return next();
     } else {
