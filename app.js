@@ -20,6 +20,8 @@ var campsiteRouter = require('./routes/campsiteRouter');
 const promotionRouter = require('./routes/promotionRouter');
 const partnerRouter = require('./routes/partnerRouter');
 
+const uploadRouter = require('./routes/uploadRouter');
+
 const mongoose = require('mongoose') //provides structure for mongoDB
 const url = config.mongoUrl; // standard format mongo db, with 
 //host local host, and with port that MongoDB uses. /nucampsite is the name of the database
@@ -76,7 +78,7 @@ app.use(express.static(path.join(__dirname, 'public'))); //Express.static - for 
 app.use('/campsites', campsiteRouter);
 app.use('/promotions', promotionRouter);
 app.use('/partners', partnerRouter);
-
+app.use('/imageUpload', uploadRouter);
 
 
 // catch 404 and forward to error handler
